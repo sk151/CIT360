@@ -1,9 +1,8 @@
 package application_controller_pattern;
 import java.util.HashMap;
-import java.util.Random;
+import application_controller_pattern.AppControllerTarget;
 
 public class AppController {
-
 	/*Create a hash map with dice
 	 * according to the list printed to the user
 	 * (1st option means we're rolling a d4 etc.)
@@ -17,18 +16,10 @@ public class AppController {
 		diceMap.put(5, 20);
 	}
 	
-	/*Parse user input and roll the die
+	/*Handle user's request and roll the die
 	 *that the user picked
 	 */
-	public static void roll(int die){
-		populateDiceMap();
-		 //(this is for testing) for(int i=0; i<20; i++){
-		Random rand = new Random();		
-		int result = rand.nextInt(diceMap.get(die)) + 1;
-		System.out.println("You rolled " + result);
-		 //}
-	}
-	
-	
-	
+	public static void handleRequest(int command){
+                AppControllerTarget.Handler.roll(diceMap.get(command));
+    }
 }
