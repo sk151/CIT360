@@ -1,7 +1,5 @@
 package application_controller_pattern;
-//import java.util.HashMap;
 import java.util.Scanner;
-
 
 public class AppControllerExample {
 
@@ -28,9 +26,9 @@ public class AppControllerExample {
 		 */
 		//AppController mycontroller = new AppController();
 		//mycontroller.roll(input);	
-		AppController.roll(input);	
+		AppController.populateDiceMap();
+		AppController.handleRequest(input);		
 		myscanner.close();
 	}
-
 }
 
