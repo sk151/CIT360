@@ -2,8 +2,6 @@ package MVC;
 
 // This Model does all the calculations
 public class CalcModel {
-    // Holds the value of the sum of the numbers
-    // entered in the view
     private double result;
     
     public void doMath(double firstNumber, double secondNumber, String operation) {
