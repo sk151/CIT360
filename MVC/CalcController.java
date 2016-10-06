@@ -17,7 +17,7 @@ public class CalcController {
              * in the Model. This wasn't a good use
              * of the pattern because this block is
              * Model's job to do while the Controller
-             * should be the connection between Model and View.
+             * should be just a connection between Model and View.
              
             switch (operation){
             case "+": theModel.add(firstNumber, secondNumber); break;
