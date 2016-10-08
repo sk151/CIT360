@@ -2,7 +2,7 @@ package MVC;
 import java.util.*;
 
 /* This View only worries about showing and
- * delivering information to and from the user
+ * getting information to and from the user
  */
 
 public class CalcView {
@@ -12,6 +12,7 @@ public class CalcView {
 	String secondNumber;
 	
 	//puts user dialog on the screen
+	//and gets the input from user
 	public CalcView() {
 		System.out.println("First number:");
 		firstNumber = scanner.nextLine();
@@ -21,17 +22,18 @@ public class CalcView {
 		secondNumber = scanner.nextLine();
 	}
 
-	//getters for the data
-    public double getFirstNumber(){
-        return Double.parseDouble(firstNumber);
+	//getters for the controller to access user input
+    public String getFirstNumber(){
+        return firstNumber;
     }
-    public double getSecondNumber(){
-    	return Double.parseDouble(secondNumber);
+    public String getSecondNumber(){
+        return secondNumber;
     }
     public String getOperation(){
         return operation;
     }
     
+    //prints the value of "result" that gets passed to it
     public void printResult(double result){
         System.out.println("Result:" + result);;
     }
