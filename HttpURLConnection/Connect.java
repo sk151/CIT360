@@ -48,15 +48,16 @@ public class Connect {
 	           */
 	          
 	          // Happy path for reading input:
-	          while ((line = bufReader.readLine()) != null)
+	          while ((myString = bufReader.readLine()) != null)
 	          {
-	        	  stringBuilder.append(line + '\n');
+	        	  stringBuilder.append(myString + '\n');
 	          }
-	        
-	          System.out.println(sb.toString());
+	          
+		  // Print the result.
+	          System.out.println(stringBuilder.toString());
 	                    
 	      } catch (Exception ex) {
-	          e.printStackTrace();
+	          ex.printStackTrace();
 	      }
 	      
 	      //Happy path is to close the connection after I'm done.
