@@ -1,7 +1,8 @@
 package HttpUrlConnection;
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
-import java.io.OutputStream;
+//import java.io.OutputStream;
+//import java.io.OutputStreamWriter;
 import java.net.HttpURLConnection;
 import java.net.URL;
 
@@ -10,7 +11,7 @@ public class Connect {
 	  public static void main(String[] args) {
 		  //This is unnecessary but wouldn't hurt to do before starting a connection.
 	      HttpURLConnection myConnection = null;
-	      OutputStreamWriter outStreamWriter = null;
+	      //OutputStreamWriter outStreamWriter = null;
 	      BufferedReader bufReader  = null;
 	      StringBuilder stringBuilder = null;
 	      String myString = null;	    
@@ -25,12 +26,10 @@ public class Connect {
 	    	   * A nasty path would be guessing what's coming from some other URL
 	    	   * myURL = new URL("http://www.youtube.com");
 	    	   */
-	          myURL = new URL("http://localhost");
-	          myConnection = null;
+	          myURL = new URL("http://localhost:8080/WebSandbox/index.html");
 	        
 	          //Open a connection and start reading
 	          myConnection = (HttpURLConnection)myURL.openConnection(); 
-	          myConnection.setRequestMethod("GET"); 
 	          myConnection.setDoOutput(true); 
 	          myConnection.setReadTimeout(10000);                     
 	          myConnection.connect(); 
@@ -65,4 +64,3 @@ public class Connect {
 	      
 	  }
 	}
-}
