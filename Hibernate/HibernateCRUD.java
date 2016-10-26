@@ -1,11 +1,11 @@
-package hibernate;
+package org.myHibernate.hibernate;
 
-import java.io.Serializable;
+import org.myHibernate.java.dto.Student;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.cfg.Configuration;
-import org.hibernate.service.ServiceRegistry;
-import org.hibernate.service.ServiceRegistryBuilder;
+import org.hibernate.sql.ordering.antlr.Factory;
+import java.util.*;
 
 // This class does the 4 basic operations with the database: Create, Read, Update, Delete
 
