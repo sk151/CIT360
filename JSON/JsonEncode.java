@@ -1,13 +1,24 @@
-package JSON;
+package JSON_QCJSON;
+import java.io.ObjectOutputStream;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.ObjectInputStream;
 import org.json.simple.JSONObject;
+import org.json.simple.parser.JSONParser;
+import org.json.simple.parser.ParseException;
 
-//This class adds values to a JSON object line by line
+import com.google.gson.*;
 
-class JsonAdd {
+//This class populates a JSON object, serializes and deserializes it into a file
+class JsonEncode {
 
    public static void main(String[] args){
-	    //Create a new object
+	  //Creata a new object
       JSONObject bankObj1 = new JSONObject();
+      String fileName = "JSON.bin";
+      JSONParser parser = new JSONParser();
       
       //A happy path to put values into the object one by one
       bankObj1.put("name", "Harry Potter");
@@ -26,7 +37,34 @@ class JsonAdd {
           System.out.println("Added Ron Weasley's account:" + bankObj1);
       }
       catch (Exception e) {
-    	  System.out.println("something went wrong");
-      }     
+    	  System.out.println("Something went wrong");
+      }
+      
+      //////////////////////////////////////////////////////////////////////////
+      // Serialization
+      
+      // First, populating the object
+      BankAccount harry = new BankAccount();
+      harry.name = "Harry Potter";
+      harry.acc_num = 4325;
+      harry.balance = 10595763.10;
+      harry.is_vip = true;
+      
+      // Using GSON to serialize the object and print it as string
+      Gson myGson = new Gson();
+      String jsonString = myGson.toJson(harry); 
+      System.out.println("Serialized a BankAccount object into JSON:" + jsonString);
+      
+      // Deserializing the JSON back into a BankAccount object
+	  try {
+		  BankAccount harry1 = myGson.fromJson(jsonString, BankAccount.class);   
+		  System.out.println("Deserialized JSON back into a BankAccount object:"
+				  + "\n name: " + harry1.name
+				  + "\n acc_num: " + harry1.acc_num
+				  + "\n balance: " + harry1.balance
+				  + "\n is vip: " + harry1.is_vip);  
+	  } catch (Exception e) {
+		  e.printStackTrace();
+	}      
    }
 }
