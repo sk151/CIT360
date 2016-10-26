@@ -1,4 +1,5 @@
 package hibernate;
+
 import java.io.Serializable;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
@@ -11,59 +12,63 @@ import org.hibernate.service.ServiceRegistryBuilder;
 public class HibernateCRUD {
 
 	public static void main(String[] args) {
-		/* From what I found, this part is necessary 
-		 * to create a configuration and a session factory.
-		 * This is a happy path to start using Hibernate.
-		 */
-		Configuration configuration = new Configuration().configure();
-		ServiceRegistryBuilder registry = new ServiceRegistryBuilder();
-		registry.applySettings(configuration.getProperties());
-		ServiceRegistry serviceRegistry = registry.buildServiceRegistry();
-		SessionFactory sessionFactory = configuration.buildSessionFactory(serviceRegistry);
-
+		// A happy path to start using Hibernate.
+		SessionFactory sessionFactory = new Configuration().configure("hibernate.cfg.xml").addAnnotatedClass(Student.class).buildSessionFactory();
+		Session session = sessionFactory.getCurrentSession();
+		
 		// Starting a new session
 		Session session = sessionFactory.openSession();
 		session.beginTransaction();
 
 		// Creating a couple of records
-		Contact contact1 = new Contact("Frodo", "baggins.f@gmail.com", "Shire", "43233421");
-		session.persist(contact1);
+		Student student1 = new Student("Frodo", "Baggins", "2.5");
+		student1.setId(1);
 
-		Contact contact2 = new Contact("Legolas", "legolas@aol.com", "Mirkwood", "95987449");
-		Serializable id = session.save(contact2);
-		System.out.println("created id: " + id);
-
+		Student student2 = new Student("Gandalf", "The Grey", "3.9");
+		student2.setId(2);
+		
+		// Happy path to submit an object:
+		session.save(student1);
+		
+		// Nasty path (using a name that doesn't exist):
+		try {
+			session.save(student10);
+		}
+		catch (Exception e) {
+			System.out.println("No student with an id of 10");
+		}
+		
+		// Commit the changes as we do in MySQL
+		session.getTransaction().commit();		
+		
 		// Reading a record with an id of 1
-		Contact contact3 = (Contact) session.get(Contact.class, new Integer(1));
+		Student student3 = (Student) session.get(Student.class, new Integer(1));
 		// A nasty path to read from a database:
-		//System.out.println("Contact3's name: " + contact3.getName());		
-		// A happy path:
-		if (contact3 == null) {
-			System.out.println("No contact with an id of 1");
+		//System.out.println("Student3's name: " + student3.getName());		
+		// A better path:
+		if (student3 == null) {
+			System.out.println("No student with an id of 1");
 		} else {
-			System.out.println("Contact3's name: " + contact3.getName());
+			System.out.println("Student3's name: " + student3.getName());
 		}
 
-		// Update an email and a phone number for a record
-		Contact contact4 = (Contact) session.load(Contact.class, new Integer(2));
-		contact5.setEmail("legolas@gmail.com");
-		contact5.setTelephone("3058201443");
-		session.update(contact4);
+		// Update a last name and a gpa number for a record
+		Student student2 = (Student) session.load(Student.class, new Integer(2));
+		student2.setLastName("The White");
+		student2.setGpa("4.0");
+		session.update(student2);
 
 		// A nasty path to deleting a record
 		try {
-			session.delete(contact5);
+			session.delete(student5);
 		} catch (Exception e) {
 			System.out.println("No record to delete!");
 		}
 		// A happy path for it
-		Contact contact5 = new Contact();
-		session.delete(contact5);
+		session.createQuery("DELETE FROM student WHERE id=1").executeUpdate();
 
 		// Commit the transaction and close the session
 		session.getTransaction().commit();
 		session.close();
-
 	}
-
 }
