@@ -52,11 +52,11 @@ public class JSON_Hibernate extends HttpServlet {
     // Using Jackson to turn the input json into an object
     try{
         Student student1 = new ObjectMapper().readValue(s, Student.class);
-		catch (Exception e) {
-        
+    catch (Exception e) {
+        myOutput.println("Bad JSON, check your syntax.");
     }
     
-    // A happy path to start using Hibernate.
+    		// A happy path to start using Hibernate.
 		SessionFactory sessionFactory = new Configuration().configure("hibernate.cfg.xml").addAnnotatedClass(Student.class).buildSessionFactory();
 		Session session = sessionFactory.getCurrentSession();
 		
@@ -67,17 +67,18 @@ public class JSON_Hibernate extends HttpServlet {
 		// Happy path to submit an object:
 		session.persist(student1);
 		
-    myOutput.println("The new object derived from received JSON:");
-    myOutput.println(student1.firstName);
-    myOutput.println(student1.lastName);
-    myOutput.println(student1.gpa);
+	    	// Showing the user what has been submitted:
+	 	myOutput.println("The new object derived from received JSON:");
+		myOutput.println(student1.firstName);
+		myOutput.println(student1.lastName);
+		myOutput.println(student1.gpa);
     
 		// Nasty path (using a name that doesn't exist):
 		try {
 			session.save(student10);
 		}
 		catch (Exception e) {
-       myOutput.println("No student with an id of 10");
+       			myOutput.println("No student with an id of 10");
 		}
 		
 		// Commit the changes as we do in MySQL
@@ -91,7 +92,7 @@ public class JSON_Hibernate extends HttpServlet {
 		if (student3 == null) {
 			 myOutput.println("Error");
 		} else {
-      myOutput.println("Student3's name: " + student3.getName());
+      			myOutput.println("Student3's name: " + student3.getName());
 		}
 
 		// Update a last name and a gpa number for a record
@@ -112,7 +113,7 @@ public class JSON_Hibernate extends HttpServlet {
 		// Commit the transaction and close the session
 		session.getTransaction().commit();
 		session.close();
-    myOutput.println("All done. Session closed.");
+    		myOutput.println("All done. Session closed.");
   
 	}
 
