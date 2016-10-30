@@ -46,74 +46,78 @@ public class JSON_Hibernate extends HttpServlet {
 		
 		PrintWriter myOutput = response.getWriter();
     
-    //Getting a json string that the user put in:
-    String s = request.getParameter("json");
+	//Getting a json string that the user put in:
+	String s = request.getParameter("json");
+
+	// A nasty path to start parsing JSON:
+	// Student student1 = new ObjectMapper().readValue(s, Student.class);
+	// A try/catch block is necessary here.
 		
-    // Using Jackson to turn the input json into an object
-    try{
-        Student student1 = new ObjectMapper().readValue(s, Student.class);
-    catch (Exception e) {
-        myOutput.println("Bad JSON, check your syntax.");
-    }
+	// Happy path tou sing Jackson to turn the input json into an object
+	try{
+		Student student1 = new ObjectMapper().readValue(s, Student.class);
+	catch (Exception e) {
+		myOutput.println("Bad JSON, check your syntax.");
+	}
     
-    		// A happy path to start using Hibernate.
-		SessionFactory sessionFactory = new Configuration().configure("hibernate.cfg.xml").addAnnotatedClass(Student.class).buildSessionFactory();
-		Session session = sessionFactory.getCurrentSession();
-		
-		// Starting a new session
-		Session session = sessionFactory.openSession();
-		session.beginTransaction();
+	// A happy path to start using Hibernate.
+	SessionFactory sessionFactory = new Configuration().configure("hibernate.cfg.xml").addAnnotatedClass(Student.class).buildSessionFactory();
+	Session session = sessionFactory.getCurrentSession();
 
-		// Happy path to submit an object:
-		session.persist(student1);
-		
-	    	// Showing the user what has been submitted:
-	 	myOutput.println("The new object derived from received JSON:");
-		myOutput.println(student1.firstName);
-		myOutput.println(student1.lastName);
-		myOutput.println(student1.gpa);
-    
-		// Nasty path (using a name that doesn't exist):
-		try {
-			session.save(student10);
-		}
-		catch (Exception e) {
-       			myOutput.println("No student with an id of 10");
-		}
-		
-		// Commit the changes as we do in MySQL
-		session.getTransaction().commit();		
-		
-		// Reading a record with an id of 1
-		Student student3 = (Student) session.get(Student.class, new Integer(1));
-		// A nasty path to read from a database:
-		//System.out.println("Student3's name: " + student3.getName());		
-		// A better path:
-		if (student3 == null) {
-			 myOutput.println("Error");
-		} else {
-      			myOutput.println("Student3's name: " + student3.getName());
-		}
+	// Starting a new session
+	Session session = sessionFactory.openSession();
+	session.beginTransaction();
 
-		// Update a last name and a gpa number for a record
-		Student student1 = (Student) session.load(Student.class, new Integer(1));
-		student1.setLastName("Billy Bob");
-		student1.setGpa("4.0");
-		session.update(student1);
+	// Happy path to submit an object:
+	session.persist(student1);
 
-		// A nasty path to deleting a record
-		try {
-			session.delete(student5);
-		} catch (Exception e) {
-			myOutput.println("No record to delete.");
-		}
-		// A happy path for it
-		session.createQuery("DELETE FROM student WHERE id=1").executeUpdate();
+	// Showing the user what has been submitted:
+	myOutput.println("The new object derived from received JSON:");
+	myOutput.println(student1.firstName);
+	myOutput.println(student1.lastName);
+	myOutput.println(student1.gpa);
 
-		// Commit the transaction and close the session
-		session.getTransaction().commit();
-		session.close();
-    		myOutput.println("All done. Session closed.");
+	// Nasty path (using a name that doesn't exist):
+	try {
+		session.save(student10);
+	}
+	catch (Exception e) {
+		myOutput.println("No student with an id of 10");
+	}
+
+	// Commit the changes as we do in MySQL
+	session.getTransaction().commit();		
+
+	// Reading a record with an id of 1
+	Student student3 = (Student) session.get(Student.class, new Integer(1));
+	// A nasty path to read from a database:
+	//System.out.println("Student3's name: " + student3.getName());		
+	// A better path:
+	if (student3 == null) {
+		 myOutput.println("Error");
+	} else {
+		myOutput.println("Student3's name: " + student3.getName());
+	}
+
+	// Update a last name and a gpa number for a record
+	Student student1 = (Student) session.load(Student.class, new Integer(1));
+	student1.setLastName("Billy Bob");
+	student1.setGpa("4.0");
+	session.update(student1);
+
+	// A nasty path to deleting a record
+	try {
+		session.delete(student5);
+	} catch (Exception e) {
+		myOutput.println("No record to delete.");
+	}
+	// A happy path for it
+	session.createQuery("DELETE FROM student WHERE id=1").executeUpdate();
+
+	// Commit the transaction and close the session
+	session.getTransaction().commit();
+	session.close();
+	myOutput.println("All done. Session closed.");
   
 	}
 
