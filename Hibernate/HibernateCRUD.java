@@ -27,8 +27,28 @@ public class HibernateCRUD {
 		Student student2 = new Student("Gandalf", "The Grey", "3.9");
 		student2.setId(2);
 		
-		// Happy path to submit an object:
+		Student student3 = new Student("Aragorn", "Son of Arathorn", "3.1");
+		student3.setId(3);
+		
+		Student student2 = new Student("Bilbo", "Baggins", "3.3");
+		student4.setId(4);
+	
+		Paper paper1 = new Paper(1, "The Effects of Lightning Spells on Ents", 2, "Not graded");
+		Paper paper2 = new Paper(2, "Origins of the Baggins Clan", 4, "A-");
+		Paper paper3 = new Paper(3, "Late History of Moria", 2, "A+");
+		Paper paper4 = new Paper(4, "My Impressions of the Wood Elves", 3, "B-");
+		Paper paper5 = new Paper(5, "Maximum Carrying Capacity of Great Eagles", 2, "A+");
+		
+		// Happy path to submit objects:
 		session.save(student1);
+		session.save(student2);
+		session.save(student3);
+		session.save(student4);
+		session.save(paper1);
+		session.save(paper2);
+		session.save(paper3);
+		session.save(paper4);
+		session.save(paper5);
 		
 		// Nasty path (using a name that doesn't exist):
 		try {
@@ -39,7 +59,26 @@ public class HibernateCRUD {
 		}
 		
 		// Commit the changes as we do in MySQL
-		session.getTransaction().commit();		
+		session.getTransaction().commit();	
+		
+//////////////////One to many relationship
+		
+		//A JOIN query that uses student_id as a foreign key
+		session.createQuery("SELECT * FROM paper JOIN students USING(student_id)").executeUpdate();
+		
+		//Create a one to many relationship between student and paper tables using student_id as the foreign key
+		session.createQuery("ALTER TABLE paper ADD CONSTRAINT papers_to_students "
+				    + "FOREIGN KEY (student_id) "
+				    + "REFERENCES student (student_id);").executeUpdate();
+		
+		//Delete all of Galdalf's papers using his name
+		session.createQuery("DELETE FROM paper WHERE "
+				    + "student_id=(SELECT student_id FROM student WHERE "
+				    + "firstName=\"Gandalf\");").executeUpdate();
+		
+		//Nasty path to add a paper (it references a student that doesn't exist)
+		session.createQuery("INSERT INTO paper "
+				    + "VALUES (6, \"Methods of Storing Dwarvish Ale in Cold Climates\", 8, \"B-\"").executeUpdate();
 		
 		// Reading a record with an id of 1
 		Student student3 = (Student) session.get(Student.class, new Integer(1));
