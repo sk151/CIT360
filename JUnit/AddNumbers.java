@@ -1,6 +1,7 @@
 package JUnit;
 /*
-* This class adds two numbers
+ * This is the class I'll be testing with JUnit, 
+ * it just adds two numbers that are passed to it.
 */
 public class AddNumbers {
 
